@@ -34,14 +34,14 @@ string decompress_file_data(string &compressed_data) {
 void cat_file(const string &hash) {
     string hash_prefix = hash.substr(0,2);
     string file_name = hash.substr(2);
-    filesystem::path object_path = filesystem::path("./git")/ "objects" / hash_prefix / file_name;
+    filesystem::path object_path = filesystem::path(".git")/ "objects" / hash_prefix / file_name;
 
     try {
         string compressed_data = compressed_file_data(object_path);
         string data = decompress_file_data(compressed_data);
 
         int nullbyte_position = data.find('\0');
-        if (nullbyte_position =! string::npos) {
+        if (nullbyte_position != string::npos) {
             string file_content = data.substr(nullbyte_position + 1);
             cout << file_content;
         }
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
             return EXIT_FAILURE;
         }
     }else if(command == "cat-file") {
-        if(argc >=4 && argv[2] == "-p") {
+        if(argc >=4 && string(argv[2]) == "-p") {
             cat_file(argv[3]);
         }
 
